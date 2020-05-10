@@ -2,6 +2,7 @@ package com.limkhashing.testdrivendevelopment.ui.movie
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -15,6 +16,10 @@ import com.limkhashing.testdrivendevelopment.data.FakeMovieData
 import com.limkhashing.testdrivendevelopment.ui.movie.MoviesListAdapter.MovieViewHolder
 import com.limkhashing.testdrivendevelopment.ui.movie.actors.StarActorsFragment
 import com.limkhashing.testdrivendevelopment.ui.movie.directors.DirectorsFragment
+import com.limkhashing.testdrivendevelopment.util.EspressoIdlingResource
+import org.hamcrest.CoreMatchers.not
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,12 +33,23 @@ class MovieListFragmentTest {
     val LIST_ITEM_IN_TEST = 4
     val MOVIE_IN_TEST = FakeMovieData.movies[LIST_ITEM_IN_TEST]
 
+    @Before
+    fun registerIdlingResource() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+    }
+
+    @After
+    fun unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+    }
+
     /**
      * RecyclerView come into the view
      */
     @Test
     fun isListFragmentVisible_onAppLaunch() {
         onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
+        onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
     }
 
     @Test
@@ -53,12 +69,12 @@ class MovieListFragmentTest {
      */
     @Test
     fun backNavigation_toMovieListFragment() {
-        // Click list item #LIST_ITEM_IN_TEST
         onView(withId(R.id.recycler_view)).perform(
             scrollToPosition<MovieViewHolder>(
                 LIST_ITEM_IN_TEST
             )
         )
+        // Click list item #LIST_ITEM_IN_TEST
         // actionOnItemAtPosition should handle scrolling, but for some reason it doesnt handle
         onView(withId(R.id.recycler_view))
             .perform(actionOnItemAtPosition<MovieViewHolder>(LIST_ITEM_IN_TEST, click()))
@@ -128,11 +144,3 @@ class MovieListFragmentTest {
             )
     }
 }
-
-
-
-
-
-
-
-

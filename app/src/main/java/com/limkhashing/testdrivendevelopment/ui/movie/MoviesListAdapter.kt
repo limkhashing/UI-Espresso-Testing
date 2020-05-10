@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.limkhashing.testdrivendevelopment.R
 import com.limkhashing.testdrivendevelopment.data.Movie
+import com.limkhashing.testdrivendevelopment.util.EspressoIdlingResource
 import kotlinx.android.synthetic.main.fragment_movie_detail.view.*
 
 class MoviesListAdapter(private val interaction: Interaction? = null) :
@@ -45,7 +46,11 @@ class MoviesListAdapter(private val interaction: Interaction? = null) :
     }
 
     fun submitList(list: List<Movie>) {
-        differ.submitList(list)
+        EspressoIdlingResource.increment()
+        val dataCommitCallback = Runnable {
+            EspressoIdlingResource.decrement()
+        }
+        differ.submitList(list, dataCommitCallback)
     }
 
     class MovieViewHolder constructor(
