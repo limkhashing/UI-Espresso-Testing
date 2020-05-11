@@ -57,6 +57,9 @@ class MovieListFragment(
     }
 
     private fun getData() {
+        // you can also check for BuildConfig.DEBUG  property
+        // if its a DEBUG or RELEASE build and
+        // have only one source for EspressoIdlingResource
         EspressoIdlingResource.increment()
         uiCommunicationListener.loading(true)
         val job = GlobalScope.launch(IO) {

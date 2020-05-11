@@ -1,5 +1,4 @@
 // https://developer.android.com/training/testing/espresso/idling-resource
-
 package com.limkhashing.testdrivendevelopment.util
 
 import androidx.test.espresso.idling.CountingIdlingResource

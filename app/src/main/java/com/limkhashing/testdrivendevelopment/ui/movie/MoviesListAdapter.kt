@@ -46,6 +46,9 @@ class MoviesListAdapter(private val interaction: Interaction? = null) :
     }
 
     fun submitList(list: List<Movie>) {
+        // you can also check for BuildConfig.DEBUG  property
+        // if its a DEBUG or RELEASE build and
+        // have only one source for EspressoIdlingResource
         EspressoIdlingResource.increment()
         val dataCommitCallback = Runnable {
             EspressoIdlingResource.decrement()

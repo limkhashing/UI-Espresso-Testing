@@ -2,7 +2,6 @@ package com.limkhashing.testdrivendevelopment.ui.movie
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -16,10 +15,8 @@ import com.limkhashing.testdrivendevelopment.data.FakeMovieData
 import com.limkhashing.testdrivendevelopment.ui.movie.MoviesListAdapter.MovieViewHolder
 import com.limkhashing.testdrivendevelopment.ui.movie.actors.StarActorsFragment
 import com.limkhashing.testdrivendevelopment.ui.movie.directors.DirectorsFragment
-import com.limkhashing.testdrivendevelopment.util.EspressoIdlingResource
+import com.limkhashing.testdrivendevelopment.util.EspressoIdlingResourceRule2
 import org.hamcrest.CoreMatchers.not
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,21 +24,33 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MovieListFragmentTest {
 
+    // Test rule is a predefined set of test rule that will be happen before running each test
+    // For example, can create test rule for Idling Resource so that we don't need to rewrite the code
+    // to register in each test class
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(FragmentActivity::class.java)
-    val LIST_ITEM_IN_TEST = 4
-    val MOVIE_IN_TEST = FakeMovieData.movies[LIST_ITEM_IN_TEST]
 
-    @Before
-    fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-    }
+//    @Rule
+//    @JvmField
+//    val espressoIdlingResourceRule = EspressoIdlingResourceRule1()
 
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
-    }
+    @Rule
+    @JvmField
+    val espressoIdlingResourceRule = EspressoIdlingResourceRule2()
+
+    private val LIST_ITEM_IN_TEST = 4
+    private val MOVIE_IN_TEST = FakeMovieData.movies[LIST_ITEM_IN_TEST]
+
+//    @Before
+//    fun registerIdlingResource() {
+//        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+//    }
+//
+//    @After
+//    fun unregisterIdlingResource() {
+//        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+//    }
 
     /**
      * RecyclerView come into the view
